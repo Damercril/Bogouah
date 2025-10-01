@@ -192,6 +192,17 @@ class _NewTicketsScreenState extends State<NewTicketsScreen> {
               ),
               Row(
                 children: [
+                  ElevatedButton.icon(
+                    onPressed: () => _showCreateTicketDialog(context, isDarkMode),
+                    icon: const Icon(Icons.add, size: 20),
+                    label: const Text('Nouveau ticket'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: NewAppTheme.primaryColor,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                   IconButton(
                     icon: const Icon(Icons.filter_list),
                     onPressed: () {
@@ -424,8 +435,6 @@ class _NewTicketsScreenState extends State<NewTicketsScreen> {
           ),
         ),
       ],
-      // Le FloatingActionButton devrait être géré par le MainScreenWrapper
-      // La barre de navigation est maintenant gérée par le MainScreenWrapper
     );
   }
 
@@ -692,5 +701,204 @@ class _NewTicketsScreenState extends State<NewTicketsScreen> {
     } else {
       return '${date.day}/${date.month}/${date.year}';
     }
+  }
+
+  void _showCreateTicketDialog(BuildContext context, bool isDarkMode) {
+    final titleController = TextEditingController();
+    final descriptionController = TextEditingController();
+    TicketPriority selectedPriority = TicketPriority.medium;
+    String selectedCategory = 'Technique';
+    String selectedAssignee = 'Sophie Martin';
+    
+    final List<String> categories = [
+      'Technique',
+      'Réseau',
+      'Logiciel',
+      'Matériel',
+      'Accès',
+      'Autre',
+    ];
+    
+    final List<String> assignees = [
+      'Sophie Martin',
+      'Thomas Dubois',
+      'Lucas Bernard',
+      'Emma Leroy',
+      'Marie Lambert',
+    ];
+    
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          backgroundColor: isDarkMode ? NewAppTheme.darkBlue : Colors.white,
+          title: Row(
+            children: [
+              Icon(Icons.confirmation_number, color: NewAppTheme.primaryColor),
+              const SizedBox(width: 12),
+              const Text('Créer un nouveau ticket'),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Titre
+                  TextField(
+                    controller: titleController,
+                    decoration: InputDecoration(
+                      labelText: 'Titre du ticket *',
+                      hintText: 'Ex: Problème de connexion',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      prefixIcon: const Icon(Icons.title),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Description
+                  TextField(
+                    controller: descriptionController,
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                      labelText: 'Description *',
+                      hintText: 'Décrivez le problème en détail',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      prefixIcon: const Icon(Icons.description),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Catégorie et Priorité
+                  Row(
+                    children: [
+                      Expanded(
+                        child: DropdownButtonFormField<String>(
+                          value: selectedCategory,
+                          decoration: InputDecoration(
+                            labelText: 'Catégorie',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            prefixIcon: const Icon(Icons.category),
+                          ),
+                          items: categories
+                              .map((cat) => DropdownMenuItem(
+                                    value: cat,
+                                    child: Text(cat),
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            setDialogState(() => selectedCategory = value!);
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: DropdownButtonFormField<TicketPriority>(
+                          value: selectedPriority,
+                          decoration: InputDecoration(
+                            labelText: 'Priorité',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            prefixIcon: const Icon(Icons.priority_high),
+                          ),
+                          items: TicketPriority.values
+                              .map((pri) => DropdownMenuItem(
+                                    value: pri,
+                                    child: Text(pri.label),
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            setDialogState(() => selectedPriority = value!);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Assigner à
+                  DropdownButtonFormField<String>(
+                    value: selectedAssignee,
+                    decoration: InputDecoration(
+                      labelText: 'Assigner à',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      prefixIcon: const Icon(Icons.person),
+                    ),
+                    items: assignees
+                        .map((name) => DropdownMenuItem(
+                              value: name,
+                              child: Text(name),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setDialogState(() => selectedAssignee = value!);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Annuler'),
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                if (titleController.text.isEmpty || descriptionController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Veuillez remplir tous les champs obligatoires')),
+                  );
+                  return;
+                }
+                
+                // Créer le ticket
+                setState(() {
+                  _tickets.insert(
+                    0,
+                    TicketModel(
+                      id: 'TK-${DateTime.now().year}-${(_tickets.length + 1).toString().padLeft(3, '0')}',
+                      title: titleController.text,
+                      description: descriptionController.text,
+                      status: TicketStatus.open,
+                      priority: selectedPriority,
+                      category: selectedCategory,
+                      assignedTo: selectedAssignee,
+                      createdBy: 'Admin',
+                      createdAt: DateTime.now(),
+                      updatedAt: DateTime.now(),
+                    ),
+                  );
+                });
+                
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Ticket créé et assigné à $selectedAssignee'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: NewAppTheme.primaryColor,
+              ),
+              icon: const Icon(Icons.check),
+              label: const Text('Créer le ticket'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

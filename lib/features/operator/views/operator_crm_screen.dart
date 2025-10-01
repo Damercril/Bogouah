@@ -31,13 +31,15 @@ class _OperatorCRMScreenState extends State<OperatorCRMScreen> {
   final List<Map<String, dynamic>> _drivers = [
     {
       'name': 'Jean Dupont',
-      'phone': '+33 6 12 34 56 78',
+      'phone': '+221 77 123 45 67',
       'courses': 145,
       'ca': 12500,
       'trend': '+15%',
       'isPositive': true,
       'rating': 4.8,
       'lastActivity': '2h',
+      'lastCourseDate': '15/01/2024 18:30',
+      'weekCourses': 22,
       'status': 'Actif',
       'notes': [
         {'date': '2024-01-15 10:30', 'text': 'Client satisfait, demande plus de courses en soirée'},
@@ -47,13 +49,15 @@ class _OperatorCRMScreenState extends State<OperatorCRMScreen> {
     },
     {
       'name': 'Marie Martin',
-      'phone': '+33 6 23 45 67 89',
+      'phone': '+221 77 234 56 78',
       'courses': 98,
       'ca': 8900,
       'trend': '-8%',
       'isPositive': false,
       'rating': 4.5,
       'lastActivity': '5h',
+      'lastCourseDate': '14/01/2024 22:15',
+      'weekCourses': 18,
       'status': 'Actif',
       'notes': [
         {'date': '2024-01-14 16:45', 'text': 'Demande d\'assistance technique'},
@@ -62,13 +66,15 @@ class _OperatorCRMScreenState extends State<OperatorCRMScreen> {
     },
     {
       'name': 'Pierre Durand',
-      'phone': '+33 6 34 56 78 90',
+      'phone': '+221 77 345 67 89',
       'courses': 167,
       'ca': 15200,
       'trend': '+22%',
       'isPositive': true,
       'rating': 4.9,
       'lastActivity': '30min',
+      'lastCourseDate': '16/01/2024 09:45',
+      'weekCourses': 28,
       'status': 'Actif',
       'notes': [],
       'weekData': [10, 13, 16, 19, 22, 25, 28],
@@ -217,23 +223,52 @@ class _OperatorCRMScreenState extends State<OperatorCRMScreen> {
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Flexible(
-                      child: Row(
-                        children: [
-                          const Icon(Icons.phone, color: Colors.white70, size: 10),
-                          const SizedBox(width: 4),
-                          Flexible(
-                            child: Text(
-                              driver['phone'],
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 10,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                    const SizedBox(height: 8),
+                    // Numéro de téléphone en GROS
+                    Row(
+                      children: [
+                        const Icon(Icons.phone, color: Colors.white, size: 20),
+                        const SizedBox(width: 8),
+                        Text(
+                          driver['phone'],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.2,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    // Dernière course et courses de la semaine
+                    Row(
+                      children: [
+                        Icon(Icons.access_time, color: Colors.white70, size: 14),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Dernière course: ${driver['lastCourseDate']}',
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Icon(Icons.calendar_today, color: Colors.white70, size: 14),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Courses cette semaine: ${driver['weekCourses']}',
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

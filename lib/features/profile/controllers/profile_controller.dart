@@ -10,7 +10,7 @@ class ProfileController extends GetxController {
     email: 'jean.dupont@example.com',
     phoneNumber: '+33 6 12 34 56 78',
     role: 'admin',
-    profileImageUrl: 'https://randomuser.me/api/portraits/men/32.jpg',
+    profileImageUrl: '', // Empty string to avoid network errors
     parkId: 'PARK-78945',
     apiKey: 'api_key_123456789',
     secretKey: 'secret_key_987654321',

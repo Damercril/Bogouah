@@ -126,12 +126,6 @@ class _WebLayoutState extends State<WebLayout> {
               children: [
                 _buildMenuItem(
                   context,
-                  icon: Icons.home_rounded,
-                  label: 'Accueil',
-                  route: '/',
-                ),
-                _buildMenuItem(
-                  context,
                   icon: Icons.dashboard_rounded,
                   label: 'Tableau de bord',
                   route: '/dashboard',
@@ -153,6 +147,12 @@ class _WebLayoutState extends State<WebLayout> {
                   icon: Icons.people_alt_rounded,
                   label: 'Houbago',
                   route: '/houbago',
+                ),
+                _buildMenuItem(
+                  context,
+                  icon: Icons.card_giftcard,
+                  label: 'Bonus',
+                  route: '/bonus',
                 ),
                 const Divider(height: 32, indent: 16, endIndent: 16),
                 _buildMenuItem(
@@ -331,6 +331,7 @@ class _WebLayoutState extends State<WebLayout> {
     if (route.startsWith('/operators')) return 'Opérateurs';
     if (route.startsWith('/tickets')) return 'Tickets';
     if (route.startsWith('/houbago')) return 'Houbago';
+    if (route.startsWith('/bonus')) return 'Bonus';
     if (route.startsWith('/profile')) return 'Profil';
     if (route.startsWith('/support')) return 'Support';
     return 'Bougouah Admin';

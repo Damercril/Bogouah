@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/new_app_theme.dart';
 import '../../../core/utils/responsive_helper.dart';
+import '../models/incidents_manager.dart';
 
 /// Écran "Mes clients" pour l'opérateur
 class OperatorClientsScreen extends StatefulWidget {
@@ -682,31 +683,55 @@ class _ClientDetailsSheetState extends State<_ClientDetailsSheet> with SingleTic
             // Boutons d'action
             Padding(
               padding: const EdgeInsets.all(24),
-              child: Row(
+              child: Column(
                 children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.phone),
-                      label: const Text('Appeler'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.phone),
+                          label: const Text('Appeler'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.email),
+                          label: const Text('Email'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: NewAppTheme.primaryColor,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.email),
-                      label: const Text('Email'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _showAddToIncidentDialog(widget.client, widget.isDarkMode);
+                      },
+                      icon: const Icon(Icons.report_problem),
+                      label: const Text('Ajouter à un incident'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: NewAppTheme.primaryColor,
+                        backgroundColor: Colors.orange,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -1212,6 +1237,227 @@ class _ClientDetailsSheetState extends State<_ClientDetailsSheet> with SingleTic
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showAddToIncidentDialog(Map<String, dynamic> client, bool isDarkMode) {
+    // Récupérer les vrais incidents depuis le gestionnaire
+    final incidentsManager = IncidentsManager();
+    final incidents = incidentsManager.incidents;
+
+    String? selectedIncidentId;
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          backgroundColor: isDarkMode ? NewAppTheme.darkBlue : Colors.white,
+          title: Row(
+            children: [
+              Icon(Icons.report_problem, color: Colors.orange),
+              const SizedBox(width: 12),
+              const Expanded(child: Text('Ajouter à un incident')),
+            ],
+          ),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+              // Info client
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: NewAppTheme.primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: NewAppTheme.primaryColor.withOpacity(0.2),
+                      child: Text(
+                        client['avatar'],
+                        style: TextStyle(
+                          color: NewAppTheme.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            client['name'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            client['phone'],
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isDarkMode ? Colors.white60 : Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Sélectionner un incident :',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 12),
+              // Liste des incidents
+              Container(
+                constraints: const BoxConstraints(maxHeight: 300),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: incidents.length,
+                  itemBuilder: (context, index) {
+                    final incident = incidents[index];
+                    final isSelected = selectedIncidentId == incident['id'];
+                    
+                    Color getPriorityColor() {
+                      switch (incident['priority']) {
+                        case 'Urgente':
+                          return Colors.red;
+                        case 'Haute':
+                          return Colors.orange;
+                        case 'Moyenne':
+                          return Colors.blue;
+                        default:
+                          return Colors.green;
+                      }
+                    }
+
+                    return InkWell(
+                      onTap: () {
+                        setDialogState(() {
+                          selectedIncidentId = incident['id'];
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: isSelected 
+                              ? NewAppTheme.primaryColor.withOpacity(0.1)
+                              : (isDarkMode ? Colors.white.withOpacity(0.05) : Colors.grey.shade50),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: isSelected 
+                                ? NewAppTheme.primaryColor
+                                : Colors.transparent,
+                            width: 2,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              isSelected ? Icons.check_circle : Icons.circle_outlined,
+                              color: isSelected ? NewAppTheme.primaryColor : Colors.grey,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        incident['id'],
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                        decoration: BoxDecoration(
+                                          color: getPriorityColor().withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: Text(
+                                          incident['priority'],
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.bold,
+                                            color: getPriorityColor(),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    incident['title'],
+                                    style: const TextStyle(fontSize: 13),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Annuler'),
+            ),
+            ElevatedButton.icon(
+              onPressed: selectedIncidentId == null
+                  ? null
+                  : () {
+                      // Ajouter le client à l'incident via le gestionnaire
+                      incidentsManager.addDriverToIncident(
+                        selectedIncidentId!,
+                        {
+                          'name': client['name'],
+                          'phone': client['phone'],
+                          'avatar': client['avatar'],
+                          'calledAt': DateTime.now(),
+                        },
+                      );
+                      
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${client['name']} ajouté à l\'incident $selectedIncidentId'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+              ),
+              icon: const Icon(Icons.check),
+              label: const Text('Ajouter'),
+            ),
+          ],
+        ),
       ),
     );
   }

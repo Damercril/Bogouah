@@ -22,91 +22,91 @@ class _NewOperatorsScreenState extends State<NewOperatorsScreen> {
       'id': '1',
       'name': 'Sophie Martin',
       'avatar': 'SM',
-      'role': 'Support Niveau 2',
+      'role': 'Opérateur Senior',
       'status': 'En ligne',
       'statusColor': Colors.green,
-      'ticketsAssigned': 5,
-      'ticketsResolved': 28,
-      'avgResponseTime': '15 min',
-      'avgResolutionTime': '1h 45m',
+      'appelsEffectues': 156,
+      'ticketsEnCours': 12,
+      'ticketsResolus': 124,
+      'tauxResolution': 91,
+      'caGenere': 15800000,
       'satisfaction': 96,
       'lastActive': 'Maintenant',
-      'skills': ['Réseau', 'Windows', 'Office 365', 'VPN'],
     },
     {
       'id': '2',
       'name': 'Thomas Dubois',
       'avatar': 'TD',
-      'role': 'Support Niveau 1',
+      'role': 'Opérateur',
       'status': 'Occupé',
       'statusColor': Colors.orange,
-      'ticketsAssigned': 8,
-      'ticketsResolved': 24,
-      'avgResponseTime': '10 min',
-      'avgResolutionTime': '2h 10m',
-      'satisfaction': 92,
+      'appelsEffectues': 142,
+      'ticketsEnCours': 10,
+      'ticketsResolus': 115,
+      'tauxResolution': 92,
+      'caGenere': 13500000,
+      'satisfaction': 94,
       'lastActive': '5 min',
-      'skills': ['Hardware', 'Windows', 'Imprimantes'],
     },
     {
       'id': '3',
-      'name': 'Emma Leroy',
-      'avatar': 'EL',
-      'role': 'Support Niveau 2',
+      'name': 'Emma Bernard',
+      'avatar': 'EB',
+      'role': 'Opérateur Senior',
       'status': 'En ligne',
       'statusColor': Colors.green,
-      'ticketsAssigned': 3,
-      'ticketsResolved': 22,
-      'avgResponseTime': '8 min',
-      'avgResolutionTime': '1h 55m',
-      'satisfaction': 94,
+      'appelsEffectues': 138,
+      'ticketsEnCours': 15,
+      'ticketsResolus': 108,
+      'tauxResolution': 88,
+      'caGenere': 12200000,
+      'satisfaction': 95,
       'lastActive': '2 min',
-      'skills': ['Linux', 'Serveurs', 'Base de données', 'Cloud'],
     },
     {
       'id': '4',
-      'name': 'Lucas Bernard',
-      'avatar': 'LB',
-      'role': 'Support Niveau 1',
+      'name': 'Lucas Petit',
+      'avatar': 'LP',
+      'role': 'Opérateur',
       'status': 'Hors ligne',
       'statusColor': Colors.grey,
-      'ticketsAssigned': 0,
-      'ticketsResolved': 18,
-      'avgResponseTime': '20 min',
-      'avgResolutionTime': '2h 30m',
-      'satisfaction': 88,
+      'appelsEffectues': 125,
+      'ticketsEnCours': 18,
+      'ticketsResolus': 98,
+      'tauxResolution': 84,
+      'caGenere': 10500000,
+      'satisfaction': 90,
       'lastActive': '3h',
-      'skills': ['Windows', 'Office 365', 'Téléphonie'],
     },
     {
       'id': '5',
-      'name': 'Camille Petit',
-      'avatar': 'CP',
-      'role': 'Support Niveau 3',
+      'name': 'Léa Moreau',
+      'avatar': 'LM',
+      'role': 'Opérateur',
       'status': 'En ligne',
       'statusColor': Colors.green,
-      'ticketsAssigned': 2,
-      'ticketsResolved': 32,
-      'avgResponseTime': '12 min',
-      'avgResolutionTime': '1h 30m',
-      'satisfaction': 98,
+      'appelsEffectues': 118,
+      'ticketsEnCours': 14,
+      'ticketsResolus': 92,
+      'tauxResolution': 87,
+      'caGenere': 9800000,
+      'satisfaction': 93,
       'lastActive': '1 min',
-      'skills': ['Sécurité', 'Réseau', 'Cloud', 'Serveurs', 'Linux'],
     },
     {
       'id': '6',
       'name': 'Antoine Moreau',
       'avatar': 'AM',
-      'role': 'Support Niveau 1',
+      'role': 'Opérateur Junior',
       'status': 'Hors ligne',
       'statusColor': Colors.grey,
-      'ticketsAssigned': 0,
-      'ticketsResolved': 15,
-      'avgResponseTime': '25 min',
-      'avgResolutionTime': '2h 45m',
+      'appelsEffectues': 95,
+      'ticketsEnCours': 8,
+      'ticketsResolus': 78,
+      'tauxResolution': 82,
+      'caGenere': 8500000,
       'satisfaction': 85,
       'lastActive': '1j',
-      'skills': ['Windows', 'Hardware', 'Imprimantes'],
     },
   ];
 
@@ -418,77 +418,66 @@ class _NewOperatorsScreenState extends State<NewOperatorsScreen> {
                   ),
                   const SizedBox(height: 8),
                   
-                  // Statistiques en ligne
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildStatItem(
-                        'Tickets assignés',
-                        operator['ticketsAssigned'].toString(),
-                        Icons.assignment,
-                        isDarkMode,
-                      ),
-                      _buildStatItem(
-                        'Tickets résolus',
-                        operator['ticketsResolved'].toString(),
-                        Icons.check_circle_outline,
-                        isDarkMode,
-                      ),
-                      _buildStatItem(
-                        'Satisfaction',
-                        '${operator['satisfaction']}%',
-                        Icons.thumb_up_outlined,
-                        isDarkMode,
-                      ),
-                    ],
-                  ),
-                  
-                  const SizedBox(height: 16),
-                  
-                  // Compétences
+                  // Statistiques en grille
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: (operator['skills'] as List<String>).map((skill) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: NewAppTheme.primaryColor.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          skill,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: NewAppTheme.primaryColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                    children: [
+                      _buildMetricChip(
+                        Icons.phone_in_talk,
+                        '${operator['appelsEffectues']} appels',
+                        Colors.blue,
+                        isDarkMode,
+                      ),
+                      _buildMetricChip(
+                        Icons.pending_actions,
+                        '${operator['ticketsEnCours']} en cours',
+                        Colors.orange,
+                        isDarkMode,
+                      ),
+                      _buildMetricChip(
+                        Icons.check_circle,
+                        '${operator['ticketsResolus']} résolus',
+                        Colors.green,
+                        isDarkMode,
+                      ),
+                      _buildMetricChip(
+                        Icons.trending_up,
+                        '${operator['tauxResolution']}% résolution',
+                        Colors.teal,
+                        isDarkMode,
+                      ),
+                      _buildMetricChip(
+                        Icons.attach_money,
+                        '${(operator['caGenere'] / 1000000).toStringAsFixed(1)}M CA',
+                        Colors.purple,
+                        isDarkMode,
+                      ),
+                      _buildMetricChip(
+                        Icons.sentiment_satisfied,
+                        '${operator['satisfaction']}% satisf.',
+                        Colors.pink,
+                        isDarkMode,
+                      ),
+                    ],
                   ),
                   
                   const SizedBox(height: 8),
                   
                   // Dernière activité
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Icon(
                         Icons.access_time,
                         size: 14,
-                        color: isDarkMode
-                            ? NewAppTheme.white.withOpacity(0.5)
-                            : NewAppTheme.darkGrey.withOpacity(0.5),
+                        color: isDarkMode ? Colors.white38 : Colors.black38,
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        'Actif ${operator['lastActive']}',
+                        'Dernière activité: ${operator['lastActive']}',
                         style: TextStyle(
-                          fontSize: 12,
-                          color: isDarkMode
-                              ? NewAppTheme.white.withOpacity(0.5)
-                              : NewAppTheme.darkGrey.withOpacity(0.5),
+                          fontSize: 11,
+                          color: isDarkMode ? Colors.white38 : Colors.black38,
                         ),
                       ),
                     ],
@@ -498,7 +487,36 @@ class _NewOperatorsScreenState extends State<NewOperatorsScreen> {
             ),
           ],
         ),
-      ).animate().fadeIn(duration: 400.ms, delay: 300.ms + (index * 100).ms).slideY(begin: 0.2, end: 0),
+      ),
+    ).animate().fadeIn(duration: 400.ms, delay: (index * 100).ms).slideY(begin: 0.1, end: 0);
+  }
+
+  Widget _buildMetricChip(IconData icon, String label, Color color, bool isDarkMode) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: color.withOpacity(0.3),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: color),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: isDarkMode ? Colors.white : Colors.black87,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -518,14 +536,13 @@ class _NewOperatorsScreenState extends State<NewOperatorsScreen> {
             fontSize: 16,
           ),
         ),
-        const SizedBox(height: 2),
         Text(
           label,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 11,
             color: isDarkMode
-                ? NewAppTheme.white.withOpacity(0.7)
-                : NewAppTheme.darkGrey.withOpacity(0.7),
+                ? NewAppTheme.white.withOpacity(0.6)
+                : NewAppTheme.darkGrey.withOpacity(0.6),
           ),
         ),
       ],

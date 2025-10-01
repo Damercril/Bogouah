@@ -12,6 +12,7 @@ import '../../features/profile/views/profile_screen.dart';
 import '../../features/profile/views/support_screen.dart';
 import '../../features/operator/views/operator_main_screen.dart';
 import '../../features/houbago/views/houbago_screen.dart';
+import '../../features/houbago/views/houbago_bonus_screen.dart';
 import 'main_screen_wrapper.dart';
 
 class AppRouter {
@@ -170,6 +171,23 @@ class AppRouter {
             child: const MainScreenWrapper(
               currentIndex: 6,
               child: HoubagoScreen(),
+            ),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+          ),
+        ),
+        GoRoute(
+          path: '/bonus',
+          name: 'bonus',
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const MainScreenWrapper(
+              currentIndex: 7,
+              child: HoubagoBonusScreen(),
             ),
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(

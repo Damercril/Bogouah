@@ -130,19 +130,54 @@ class _OperatorStatsScreenState extends State<OperatorStatsScreen> {
   }
 
   Widget _buildMainKPIs(bool isDarkMode) {
+    // Données selon la période sélectionnée
+    final periodData = [
+      { // Jour
+        'appels': 45,
+        'ticketsEnCours': 12,
+        'chauffeursActifs': 156,
+        'rechargements': 342,
+        'tauxConversion': 68,
+      },
+      { // Semaine
+        'appels': 285,
+        'ticketsEnCours': 23,
+        'chauffeursActifs': 156,
+        'rechargements': 2458,
+        'tauxConversion': 72,
+      },
+      { // Mois
+        'appels': 1240,
+        'ticketsEnCours': 18,
+        'chauffeursActifs': 156,
+        'rechargements': 10850,
+        'tauxConversion': 75,
+      },
+      { // Année
+        'appels': 14850,
+        'ticketsEnCours': 15,
+        'chauffeursActifs': 156,
+        'rechargements': 128450,
+        'tauxConversion': 78,
+      },
+    ];
+    
+    final data = periodData[_selectedPeriodIndex];
+    
     final kpis = [
-      {'title': 'Tickets traités', 'value': '124', 'icon': Icons.check_circle, 'color': Colors.green},
-      {'title': 'Temps moyen', 'value': '15min', 'icon': Icons.timer, 'color': Colors.blue},
-      {'title': 'Chiffre d\'affaires', 'value': '18.5M FCFA', 'icon': Icons.euro, 'color': Colors.orange},
-      {'title': 'Taux conversion', 'value': '92%', 'icon': Icons.trending_up, 'color': Colors.purple},
+      {'title': 'Appels', 'value': '${data['appels']}', 'icon': Icons.phone, 'color': Colors.blue},
+      {'title': 'Tickets en cours', 'value': '${data['ticketsEnCours']}', 'icon': Icons.confirmation_number, 'color': Colors.orange},
+      {'title': 'Chauffeurs actifs', 'value': '${data['chauffeursActifs']}', 'icon': Icons.local_taxi, 'color': Colors.green},
+      {'title': 'Rechargements', 'value': '${data['rechargements']}', 'icon': Icons.credit_card, 'color': Colors.purple},
+      {'title': 'Taux de conversion', 'value': '${data['tauxConversion']}%', 'icon': Icons.trending_up, 'color': Colors.teal},
     ];
 
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: ResponsiveHelper.isDesktop(context) ? 4 : 2,
-        childAspectRatio: 1.5,
+        crossAxisCount: ResponsiveHelper.isDesktop(context) ? 5 : 2,
+        childAspectRatio: ResponsiveHelper.isDesktop(context) ? 1.3 : 1.5,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),
@@ -167,29 +202,35 @@ class _OperatorStatsScreenState extends State<OperatorStatsScreen> {
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 kpi['icon'] as IconData,
                 color: kpi['color'] as Color,
-                size: 32,
+                size: 28,
               ),
-              const SizedBox(height: 12),
-              Text(
-                kpi['value'] as String,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: isDarkMode ? Colors.white : Colors.black87,
+              const SizedBox(height: 8),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  kpi['value'] as String,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: isDarkMode ? Colors.white : Colors.black87,
+                  ),
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 kpi['title'] as String,
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 11,
                   color: isDarkMode ? Colors.white60 : Colors.black54,
                 ),
                 textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

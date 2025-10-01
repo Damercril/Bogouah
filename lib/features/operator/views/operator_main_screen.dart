@@ -3,9 +3,11 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/new_app_theme.dart';
 import '../../../core/utils/responsive_helper.dart';
 import 'operator_crm_screen.dart';
+import 'operator_clients_screen.dart';
 import 'operator_stats_screen.dart';
 import 'new_operator_tickets_screen.dart';
-import '../../houbago/views/houbago_screen.dart';
+import 'operator_support_screen.dart';
+import '../../houbago/views/houbago_operator_screen.dart';
 import '../../profile/views/profile_screen.dart';
 
 /// Écran principal pour les opérateurs avec navigation
@@ -19,12 +21,15 @@ class OperatorMainScreen extends StatefulWidget {
 class _OperatorMainScreenState extends State<OperatorMainScreen> {
   int _currentIndex = 0;
   int _pendingTicketsCount = 3; // Nombre de tickets non traités
+  int _activeIncidentsCount = 4; // Nombre d'incidents actifs
 
   final List<Widget> _screens = [
     const OperatorCRMScreen(),
+    const OperatorClientsScreen(),
     const OperatorStatsScreen(),
     const NewOperatorTicketsScreen(),
-    const HoubagoScreen(),
+    const HoubagoOperatorScreen(),
+    const OperatorSupportScreen(),
     const ProfileScreen(),
   ];
 
@@ -114,28 +119,41 @@ class _OperatorMainScreenState extends State<OperatorMainScreen> {
                         isDarkMode: isDarkMode,
                       ),
                       _buildMenuItem(
+                        icon: Icons.people,
+                        label: 'Mes Clients',
+                        index: 1,
+                        isDarkMode: isDarkMode,
+                      ),
+                      _buildMenuItem(
                         icon: Icons.bar_chart_rounded,
                         label: 'Mes Statistiques',
-                        index: 1,
+                        index: 2,
                         isDarkMode: isDarkMode,
                       ),
                       _buildMenuItem(
                         icon: Icons.confirmation_number_rounded,
                         label: 'Mes Tickets',
-                        index: 2,
+                        index: 3,
                         isDarkMode: isDarkMode,
                         badge: _pendingTicketsCount,
                       ),
                       _buildMenuItem(
                         icon: Icons.people_alt_rounded,
                         label: 'Houbago',
-                        index: 3,
+                        index: 4,
                         isDarkMode: isDarkMode,
+                      ),
+                      _buildMenuItem(
+                        icon: Icons.support_agent,
+                        label: 'Support',
+                        index: 5,
+                        isDarkMode: isDarkMode,
+                        badge: _activeIncidentsCount,
                       ),
                       _buildMenuItem(
                         icon: Icons.person_rounded,
                         label: 'Profil',
-                        index: 4,
+                        index: 6,
                         isDarkMode: isDarkMode,
                       ),
                     ],
@@ -474,6 +492,10 @@ class _OperatorMainScreenState extends State<OperatorMainScreen> {
           label: 'CRM',
         ),
         const BottomNavigationBarItem(
+          icon: Icon(Icons.people),
+          label: 'Clients',
+        ),
+        const BottomNavigationBarItem(
           icon: Icon(Icons.bar_chart_rounded),
           label: 'Stats',
         ),
@@ -490,6 +512,16 @@ class _OperatorMainScreenState extends State<OperatorMainScreen> {
           icon: Icon(Icons.people_alt_rounded),
           label: 'Houbago',
         ),
+        BottomNavigationBarItem(
+          icon: _activeIncidentsCount > 0
+              ? Badge(
+                  label: Text(_activeIncidentsCount.toString()),
+                  backgroundColor: Colors.red,
+                  child: const Icon(Icons.support_agent),
+                )
+              : const Icon(Icons.support_agent),
+          label: 'Support',
+        ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.person_rounded),
           label: 'Profil',
@@ -503,12 +535,16 @@ class _OperatorMainScreenState extends State<OperatorMainScreen> {
       case 0:
         return 'Fiches CRM';
       case 1:
-        return 'Mes Statistiques';
+        return 'Mes Clients';
       case 2:
-        return 'Mes Tickets';
+        return 'Mes Statistiques';
       case 3:
-        return 'Houbago';
+        return 'Mes Tickets';
       case 4:
+        return 'Houbago';
+      case 5:
+        return 'Support Technique';
+      case 6:
         return 'Profil';
       default:
         return 'Opérateur';

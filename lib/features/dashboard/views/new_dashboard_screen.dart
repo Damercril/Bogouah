@@ -68,35 +68,156 @@ class _NewDashboardScreenState extends State<NewDashboardScreen> {
     {'day': 'Dim', 'courses': 100, 'revenus': 1300000},
   ];
 
-  // Données fictives pour les performances des chauffeurs
+  // Données fictives pour les performances des opérateurs
   final List<Map<String, dynamic>> _operatorPerformance = [
     {
-      'name': 'Jean Dupont',
-      'avatar': 'JD',
-      'courses': 128,
-      'chiffreAffaires': '3,25M FCFA',
-      'satisfaction': 96,
-    },
-    {
-      'name': 'Marie Dubois',
-      'avatar': 'MD',
-      'courses': 115,
-      'chiffreAffaires': '2,98M FCFA',
-      'satisfaction': 98,
-    },
-    {
-      'name': 'Ahmed Benali',
-      'avatar': 'AB',
-      'courses': 105,
-      'chiffreAffaires': '2,75M FCFA',
-      'satisfaction': 94,
-    },
-    {
-      'name': 'Sophie Moreau',
+      'id': '1',
+      'name': 'Sophie Martin',
       'avatar': 'SM',
-      'courses': 98,
-      'chiffreAffaires': '2,54M FCFA',
-      'satisfaction': 92,
+      'role': 'Opérateur Senior',
+      'appels': 156,
+      'ticketsResolus': 124,
+      'ticketsEnCours': 12,
+      'tauxResolution': 91,
+      'satisfaction': 96,
+      'badge': '🏆',
+      'rank': 1,
+      'courses': 156,
+      'chiffreAffaires': '15.8M',
+      'status': 'En ligne',
+      'statusColor': Colors.green,
+      'lastActive': 'Maintenant',
+    },
+    {
+      'id': '2',
+      'name': 'Thomas Dubois',
+      'avatar': 'TD',
+      'role': 'Opérateur',
+      'appels': 142,
+      'ticketsResolus': 115,
+      'ticketsEnCours': 10,
+      'tauxResolution': 92,
+      'satisfaction': 94,
+      'badge': '🥈',
+      'rank': 2,
+      'courses': 142,
+      'chiffreAffaires': '13.5M',
+      'status': 'En ligne',
+      'statusColor': Colors.green,
+      'lastActive': '2 min',
+    },
+    {
+      'id': '3',
+      'name': 'Emma Bernard',
+      'avatar': 'EB',
+      'role': 'Opérateur Senior',
+      'appels': 138,
+      'ticketsResolus': 108,
+      'ticketsEnCours': 15,
+      'tauxResolution': 88,
+      'satisfaction': 95,
+      'badge': '🥉',
+      'rank': 3,
+      'courses': 138,
+      'chiffreAffaires': '12.2M',
+      'status': 'En ligne',
+      'statusColor': Colors.green,
+      'lastActive': '5 min',
+    },
+    {
+      'id': '4',
+      'name': 'Lucas Petit',
+      'avatar': 'LP',
+      'role': 'Opérateur',
+      'appels': 125,
+      'ticketsResolus': 98,
+      'ticketsEnCours': 18,
+      'tauxResolution': 84,
+      'satisfaction': 90,
+      'badge': '',
+      'rank': 4,
+      'courses': 125,
+      'chiffreAffaires': '10.5M',
+      'status': 'Occupé',
+      'statusColor': Colors.orange,
+      'lastActive': '10 min',
+    },
+    {
+      'id': '5',
+      'name': 'Léa Moreau',
+      'avatar': 'LM',
+      'role': 'Opérateur',
+      'appels': 118,
+      'ticketsResolus': 92,
+      'ticketsEnCours': 14,
+      'tauxResolution': 87,
+      'satisfaction': 93,
+      'badge': '',
+      'rank': 5,
+      'courses': 118,
+      'chiffreAffaires': '9.8M',
+      'status': 'En ligne',
+      'statusColor': Colors.green,
+      'lastActive': '1 min',
+    },
+  ];
+
+  // Données fictives pour les chauffeurs les plus performants
+  final List<Map<String, dynamic>> _topDrivers = [
+    {
+      'name': 'Ahmed Diallo',
+      'avatar': 'AD',
+      'courses': 245,
+      'chiffreAffaires': '18.5M',
+      'satisfaction': 98,
+      'badge': '🏆',
+      'rank': 1,
+      'vehicleType': 'Voiture',
+      'zone': 'Dakar Centre',
+    },
+    {
+      'name': 'Fatou Sow',
+      'avatar': 'FS',
+      'courses': 228,
+      'chiffreAffaires': '16.2M',
+      'satisfaction': 97,
+      'badge': '🥈',
+      'rank': 2,
+      'vehicleType': 'Camion',
+      'zone': 'Plateau',
+    },
+    {
+      'name': 'Moussa Kane',
+      'avatar': 'MK',
+      'courses': 215,
+      'chiffreAffaires': '15.8M',
+      'satisfaction': 96,
+      'badge': '🥉',
+      'rank': 3,
+      'vehicleType': 'Voiture',
+      'zone': 'Almadies',
+    },
+    {
+      'name': 'Aminata Ndiaye',
+      'avatar': 'AN',
+      'courses': 198,
+      'chiffreAffaires': '14.2M',
+      'satisfaction': 95,
+      'badge': '',
+      'rank': 4,
+      'vehicleType': 'Moto',
+      'zone': 'Parcelles',
+    },
+    {
+      'name': 'Ibrahima Fall',
+      'avatar': 'IF',
+      'courses': 185,
+      'chiffreAffaires': '13.5M',
+      'satisfaction': 94,
+      'badge': '',
+      'rank': 5,
+      'vehicleType': 'Voiture',
+      'zone': 'Mermoz',
     },
   ];
 
@@ -417,11 +538,33 @@ class _NewDashboardScreenState extends State<NewDashboardScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Chauffeurs les plus performants',
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              NewAppTheme.primaryColor,
+                              NewAppTheme.secondaryColor,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.emoji_events,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        'Opérateurs les plus performants',
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                   TextButton(
                     onPressed: () {},
@@ -472,19 +615,29 @@ class _NewDashboardScreenState extends State<NewDashboardScreen> {
                       ),
                       child: Row(
                       children: [
+                        // Badge et rang
                         Container(
-                          width: 40,
-                          height: 40,
+                          width: 50,
+                          height: 50,
                           decoration: BoxDecoration(
-                            color: NewAppTheme.primaryColor.withOpacity(0.2),
+                            gradient: LinearGradient(
+                              colors: operator['rank'] == 1
+                                  ? [Colors.amber, Colors.orange]
+                                  : operator['rank'] == 2
+                                      ? [Colors.grey.shade300, Colors.grey.shade400]
+                                      : operator['rank'] == 3
+                                          ? [Colors.brown.shade300, Colors.brown.shade400]
+                                          : [NewAppTheme.primaryColor.withOpacity(0.3), NewAppTheme.primaryColor.withOpacity(0.5)],
+                            ),
                             shape: BoxShape.circle,
                           ),
                           child: Center(
                             child: Text(
-                              operator['avatar'],
+                              operator['badge'].isNotEmpty ? operator['badge'] : '#${operator['rank']}',
                               style: TextStyle(
-                                color: NewAppTheme.primaryColor,
+                                fontSize: operator['badge'].isNotEmpty ? 24 : 18,
                                 fontWeight: FontWeight.bold,
+                                color: operator['badge'].isEmpty ? Colors.white : null,
                               ),
                             ),
                           ),
@@ -501,30 +654,36 @@ class _NewDashboardScreenState extends State<NewDashboardScreen> {
                                   fontSize: 16,
                                 ),
                               ),
-                              const SizedBox(height: 4),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: [
-                                    _buildOperatorStat(
-                                      Icons.directions_car_outlined,
-                                      '${operator['courses']} courses',
-                                      isDarkMode,
-                                    ),
-                                    const SizedBox(width: 16),
-                                    _buildOperatorStat(
-                                      Icons.euro_outlined,
-                                      operator['chiffreAffaires'],
-                                      isDarkMode,
-                                    ),
-                                    const SizedBox(width: 16),
-                                    _buildOperatorStat(
-                                      Icons.thumb_up_outlined,
-                                      '${operator['satisfaction']}%',
-                                      isDarkMode,
-                                    ),
-                                  ],
-                                ),
+                              const SizedBox(height: 8),
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 6,
+                                children: [
+                                  _buildOperatorChip(
+                                    Icons.phone_in_talk,
+                                    '${operator['appels']} appels',
+                                    Colors.blue,
+                                    isDarkMode,
+                                  ),
+                                  _buildOperatorChip(
+                                    Icons.check_circle,
+                                    '${operator['ticketsResolus']} résolus',
+                                    Colors.green,
+                                    isDarkMode,
+                                  ),
+                                  _buildOperatorChip(
+                                    Icons.pending_actions,
+                                    '${operator['ticketsEnCours']} en cours',
+                                    Colors.orange,
+                                    isDarkMode,
+                                  ),
+                                  _buildOperatorChip(
+                                    Icons.trending_up,
+                                    '${operator['tauxResolution']}% résolution',
+                                    Colors.teal,
+                                    isDarkMode,
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -542,6 +701,63 @@ class _NewDashboardScreenState extends State<NewDashboardScreen> {
                 },
               ),
               
+              const SizedBox(height: 32),
+              
+              // Chauffeurs les plus performants
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.orange,
+                              Colors.deepOrange,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.drive_eta,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        'Chauffeurs les plus performants',
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      'Voir tout',
+                      style: TextStyle(
+                        color: NewAppTheme.primaryColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _topDrivers.length,
+                itemBuilder: (context, index) {
+                  final driver = _topDrivers[index];
+                  return _buildDriverCard(driver, isDarkMode, index);
+                },
+              ),
+              
               const SizedBox(height: 24),
             ],
           ),
@@ -552,27 +768,144 @@ class _NewDashboardScreenState extends State<NewDashboardScreen> {
     );
   }
 
-  Widget _buildOperatorStat(IconData icon, String text, bool isDarkMode) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 14,
-          color: isDarkMode
-              ? NewAppTheme.white.withOpacity(0.7)
-              : NewAppTheme.darkGrey.withOpacity(0.7),
-        ),
-        const SizedBox(width: 4),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 12,
-            color: isDarkMode
-                ? NewAppTheme.white.withOpacity(0.7)
-                : NewAppTheme.darkGrey.withOpacity(0.7),
+  Widget _buildDriverCard(Map<String, dynamic> driver, bool isDarkMode, int index) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDarkMode ? NewAppTheme.darkBlue : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: index == 0 ? Border.all(color: Colors.orange, width: 2) : null,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
           ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Badge et rang
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: driver['rank'] == 1
+                    ? [Colors.amber, Colors.orange]
+                    : driver['rank'] == 2
+                        ? [Colors.grey.shade300, Colors.grey.shade400]
+                        : driver['rank'] == 3
+                            ? [Colors.brown.shade300, Colors.brown.shade400]
+                            : [Colors.orange.withOpacity(0.3), Colors.orange.withOpacity(0.5)],
+              ),
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                driver['badge'].isNotEmpty ? driver['badge'] : '#${driver['rank']}',
+                style: TextStyle(
+                  fontSize: driver['badge'].isNotEmpty ? 24 : 18,
+                  fontWeight: FontWeight.bold,
+                  color: driver['badge'].isEmpty ? Colors.white : null,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  driver['name'],
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 6,
+                  children: [
+                    _buildOperatorChip(
+                      Icons.directions_car,
+                      '${driver['courses']} courses',
+                      Colors.blue,
+                      isDarkMode,
+                    ),
+                    _buildOperatorChip(
+                      Icons.attach_money,
+                      '${driver['chiffreAffaires']} CA',
+                      Colors.green,
+                      isDarkMode,
+                    ),
+                    _buildOperatorChip(
+                      Icons.sentiment_satisfied,
+                      '${driver['satisfaction']}% satisf.',
+                      Colors.purple,
+                      isDarkMode,
+                    ),
+                    _buildOperatorChip(
+                      Icons.local_shipping,
+                      driver['vehicleType'],
+                      Colors.orange,
+                      isDarkMode,
+                    ),
+                    _buildOperatorChip(
+                      Icons.location_on,
+                      driver['zone'],
+                      Colors.teal,
+                      isDarkMode,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Icon(
+            Icons.chevron_right,
+            color: isDarkMode
+                ? NewAppTheme.white.withOpacity(0.5)
+                : NewAppTheme.darkGrey.withOpacity(0.5),
+          ),
+        ],
+      ),
+    ).animate().fadeIn(duration: 400.ms, delay: (800 + index * 100).ms).slideX(begin: 0.2, end: 0);
+  }
+
+  Widget _buildOperatorChip(IconData icon, String text, Color color, bool isDarkMode) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: color.withOpacity(0.3),
+          width: 1,
         ),
-      ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 12,
+            color: color,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: isDarkMode ? Colors.white : Colors.black87,
+            ),
+          ),
+        ],
+      ),
     );
   }
   
